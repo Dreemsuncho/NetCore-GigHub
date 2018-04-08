@@ -1,0 +1,25 @@
+﻿
+<div>
+    <h1>HELLO FROM INDEX :):):):)</h1>
+    @if (User.Identity.IsAuthenticated)
+    {
+        @foreach (var identity in User.Identities)
+        {
+            <h3>@identity.Name</h3>
+            <h3>@identity.Actor</h3>
+            <ul>
+                @foreach (var claim in identity.Claims)
+                {
+                    <li>@claim.Type---@claim.Value---@claim.ValueType</li>
+                }
+            </ul>
+        }
+    }
+    else
+    {
+        <span>
+            Unauthorized!
+        </span>
+    }
+</div>
+

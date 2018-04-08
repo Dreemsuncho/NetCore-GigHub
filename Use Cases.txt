@@ -1,0 +1,41 @@
+
+1. Authentication:
+ - Sign up
+ - Login
+ - Log out
+ - Edit profile
+ - Change password
+
+2. Following:
+ - Gig feed
+ - Follow an artist
+ - Unfollow an artist
+ - Who I'm following
+
+
+3. Gigs:
+ - View all upcoming gigs
+ - My upcoming gigs (for artist)
+ - Add a gig
+ - Edit a gig
+ - Remove a gig
+ - Vie gig details
+ - Search
+
+
+4. Gig Calendar:
+ - Add a gig to calendar
+ - Remove a gig from calendar
+ - View gigs I'm attending
+
+
+Core Use Cases
+- Add a gig
+- All upcoming gigs
+- Add a gig to calendar
+- Follow an artist
+- View gigs I'm attending
+- Who I'm following
+
+
+
