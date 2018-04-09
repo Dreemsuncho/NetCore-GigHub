@@ -1,18 +1,21 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from "@angular/forms";
 import { NgModule } from '@angular/core';
 
 
-import { AppComponent } from './app.component';
+import { GigCreateComponent } from './gig-create.component';
+
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    GigCreateComponent
   ],
   imports: [
-    BrowserModule
+    BrowserModule,
+    FormsModule
   ],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [GigCreateComponent]
 })
 export class AppModule { }

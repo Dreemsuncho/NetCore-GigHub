@@ -8,20 +8,20 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 var platform_browser_1 = require("@angular/platform-browser");
 var core_1 = require("@angular/core");
-var app_component_1 = require("./app.component");
+var gig_create_component_1 = require("./gig-create.component");
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
     AppModule = __decorate([
         core_1.NgModule({
             declarations: [
-                app_component_1.AppComponent
+                gig_create_component_1.GigCreateComponent
             ],
             imports: [
                 platform_browser_1.BrowserModule
             ],
             providers: [],
-            bootstrap: [app_component_1.AppComponent]
+            bootstrap: []
         })
     ], AppModule);
     return AppModule;
