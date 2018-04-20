@@ -1,12 +1,8 @@
-﻿
-@section Scripts {
-    <script src="~/client/dist/inline.bundle.js"></script>
-    <script src="~/client/dist/polyfills.bundle.js"></script>
-    <script src="~/client/dist/styles.bundle.js"></script>
-    <script src="~/client/dist/vendor.bundle.js"></script>
-    <script src="~/client/dist/main.bundle.js"></script>
+﻿@model IEnumerable<Genre>
+
+@{
+    ViewData[_CONST.Title] = "Gig Create";
 }
 
-<h1>Create Gig</h1>
-<gig-create></gig-create>
+<gig-create genres="@JsonConvert.SerializeObject(Model)"></gig-create>
 

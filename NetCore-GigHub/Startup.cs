@@ -1,18 +1,20 @@
-﻿using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using NetCore_GigHub.Data;
+using NetCore_GigHub.Entities;
+using System.Text;
 
 namespace NetCore_GigHub
 {
     public class Startup
     {
-        private IConfiguration _configuration;
+        private readonly IConfiguration _configuration;
 
         public Startup(IConfiguration configuration)
         {
@@ -22,16 +24,28 @@ namespace NetCore_GigHub
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAuthentication(options =>
+
+            services.AddIdentity<User, UserRole>(options =>
             {
-                options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
+                options.User.RequireUniqueEmail = true;
+                options.Password.RequiredLength = 3;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireUppercase = false;
             })
-            .AddOpenIdConnect(options =>
-            {
-                _configuration.Bind("AzureAd", options);
-            })
-            .AddCookie();
+            .AddEntityFrameworkStores<ContextGigHub>();
+
+            services.AddAuthentication()
+                    .AddJwtBearer(options =>
+                    {
+                        options.TokenValidationParameters = new TokenValidationParameters
+                        {
+                            ValidIssuer = _configuration["Jwt:Issuer"],
+                            ValidAudience = _configuration["Jwt:Audience"],
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]))
+                        };
+                    });
+
 
             services.AddDbContext<ContextGigHub>(options =>
             {
@@ -59,7 +73,7 @@ namespace NetCore_GigHub
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=App}/{action=Index}/{id?}");
             });
         }
     }

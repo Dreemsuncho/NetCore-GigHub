@@ -1,42 +1,81 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using NetCore_GigHub.Entities;
+using System;
+using System.Threading.Tasks;
 
 namespace NetCore_GigHub.Controllers
 {
     public class AccountController : Controller
     {
-        [HttpGet]
-        public IActionResult SignIn()
+        private SignInManager<User> _signInManager;
+        private UserManager<User> _userManager;
+
+        public AccountController(SignInManager<User> signInManager, UserManager<User> userManager)
         {
-            var redirectUrl = Url.Action(nameof(HomeController.Index), "Home");
-            return Challenge(
-                new AuthenticationProperties { RedirectUri = redirectUrl },
-                OpenIdConnectDefaults.AuthenticationScheme);
+            _signInManager = signInManager;
+            _userManager = userManager;
         }
 
-        [HttpGet]
-        public IActionResult SignOut()
+        [HttpPost]
+        public async Task<ActionResult> Register([FromBody]ViewModelRegister viewModel, string urlReturn)
         {
-            var callbackUrl = Url.Action(nameof(SignedOut), "Account", values: null, protocol: Request.Scheme);
-            return SignOut(
-                new AuthenticationProperties { RedirectUri = callbackUrl },
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                OpenIdConnectDefaults.AuthenticationScheme);
+            if (ModelState.IsValid)
+            {
+                var user = new User
+                {
+                    UserName = viewModel.Username,
+                    Email = viewModel.Email
+                };
+
+                var result = await _userManager.CreateAsync(user, viewModel.Password);
+
+                if (result.Succeeded)
+                    return Ok(viewModel);
+                else
+                    return BadRequest(new { message = "CreateAsync Errors!", errors = result.Errors });
+            }
+            else
+            {
+                return BadRequest(new { message = "ModelState Errors!", errors = ModelState.Values });
+            }
         }
 
 
         [HttpGet]
-        public ActionResult SignedOut()
+        public ActionResult Login()
         {
             if (User.Identity.IsAuthenticated)
             {
-                // Redirect to home page if the user is authenticated.
-                return RedirectToAction(nameof(HomeController.Index), "Home");
+                return RedirectToAction(_CONST.Index, _CONST.App);
+            }
+            else
+            {
+                return View();
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Login(ViewModelLogin viewModel)
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction(_CONST.Index, _CONST.App);
+            }
+            else
+            {
+                return View();
             }
 
-            return View();
+            // TODO
+        }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult Logout()
+        {
+            throw new NotImplementedException();
         }
     }
 }

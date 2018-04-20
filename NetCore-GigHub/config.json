@@ -1,0 +1,10 @@
+﻿{
+  "Jwt": {
+    "Key": "Secret Key",
+    "Issuer": "localhost",
+    "Audience": "users"
+  },
+  "ConnectionStrings": {
+    "GigHub": "Server=(localdb)\\MSSQLLocalDB;Database=GigHub;Trusted_Connection=True;MultipleActiveResultSets=true"
+  }
+}

@@ -3,15 +3,15 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace NetCore_GigHub.Controllers
 {
-    public class HomeController : Controller
+    public class AppController : Controller
     {
-        public IActionResult Index()
+        public ActionResult Index()
         {
             return View();
         }
 
         [Authorize]
-        public IActionResult More()
+        public ActionResult More()
         {
             return new ObjectResult(new { name = "Elvis", Age = "26" });
         }

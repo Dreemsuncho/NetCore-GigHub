@@ -8,6 +8,7 @@
     "outDir": "./wwwroot/client/out-tsc",
     "sourceMap": true,
     "declaration": false,
+    "allowJs": true,
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,

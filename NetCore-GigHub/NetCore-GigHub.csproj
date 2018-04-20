@@ -10,16 +10,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\Client\dist\inline.bundle.js" />
-    <None Include="wwwroot\Client\dist\inline.bundle.js.map" />
-    <None Include="wwwroot\Client\dist\main.bundle.js" />
-    <None Include="wwwroot\Client\dist\main.bundle.js.map" />
-    <None Include="wwwroot\Client\dist\polyfills.bundle.js" />
-    <None Include="wwwroot\Client\dist\polyfills.bundle.js.map" />
-    <None Include="wwwroot\Client\dist\styles.bundle.js" />
-    <None Include="wwwroot\Client\dist\styles.bundle.js.map" />
-    <None Include="wwwroot\Client\dist\vendor.bundle.js" />
-    <None Include="wwwroot\Client\dist\vendor.bundle.js.map" />
     <None Include="wwwroot\lib\bootstrap\js\bootstrap.bundle.min.js" />
     <None Include="wwwroot\lib\bootstrap\js\bootstrap.min.js" />
     <None Include="wwwroot\lib\jquery\jquery.min.js" />

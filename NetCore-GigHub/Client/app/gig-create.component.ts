@@ -1,31 +1,33 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef } from '@angular/core';
+import { HttpClient, HttpHeaders } from "@angular/common/http"
 
 @Component({
-  selector: 'gig-create',
+  selector: "gig-create",
   templateUrl: "./gig-create.component.html",
   styles: []
 })
 export class GigCreateComponent {
 
-  model: any = {
-    Venue: String,
-    Date: String,
-    Time: String,
-    Genre: String
+  public genres: any = JSON.parse(this.elementRef.nativeElement.getAttribute("genres"));
+
+  constructor(
+    private http: HttpClient,
+    private elementRef: ElementRef) {
   }
 
-  createGig(formValues) {
-    console.dir(formValues);
-  }
+  createGig(formValues) { 
+    let url: string = "Create";
+    let reqBody = formValues;
 
-  genres = [
-    { id: "id1", title: "Genre1" },
-    { id: "id2", title: "Genre2" },
-    { id: "id3", title: "Genre3" },
-    { id: "id4", title: "Genre4" },
-    { id: "id5", title: "Genre5" },
-    { id: "id6", title: "Genre6" },
-    { id: "id7", title: "Genre7" },
-    { id: "id8", title: "Genre8" }
-  ]
+    this.http.post(url, reqBody)
+      .subscribe(res => {
+        alert("SUCESS!!");
+        window["res"] = res || "NO RESUL T!";
+        console.log(res)
+      }, err => {
+        alert("ERROR");
+        window["err"] = err.error;
+        console.log(window["err"])
+      });
+  }
 }

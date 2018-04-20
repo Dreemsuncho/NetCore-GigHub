@@ -1,10 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using NetCore_GigHub.Entities;
 
 namespace NetCore_GigHub.Data
 {
-    class ContextGigHub : DbContext
+    public class ContextGigHub : IdentityDbContext<User, UserRole, int>
     {
         public ContextGigHub(DbContextOptions options)
             : base(options)
@@ -14,33 +14,22 @@ namespace NetCore_GigHub.Data
 
         public DbSet<Gig> Gigs { get; set; }
         public DbSet<Genre> Genres { get; set; }
-    }
 
-    public class Genre
-    {
-        public byte Id { get; set; }
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
 
-        [Required]
-        [StringLength(255)]
-        public string Name { get; set; }
-    }
 
-    public class Gig
-    {
-        public int Id { get; set; }
+            builder.Entity<User>(options =>
+            {
+                options.Property(u => u.UserName)
+                .HasMaxLength(40)
+                .IsRequired();
 
-        [Required]
-        public string ArtistId { get; set; }
-
-        public DateTime DateTime { get; set; }
-
-        [Required]
-        [StringLength(255)]
-        public string Venue { get; set; }
-
-        public Genre Genre { get; set; }
-
-        [Required]
-        public byte GenreId { get; set; }
+                options.Property(u => u.Email)
+                .HasMaxLength(40)
+                .IsRequired();
+            });
+        }
     }
 }
