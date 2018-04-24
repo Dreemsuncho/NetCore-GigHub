@@ -1,10 +1,12 @@
 ﻿{
-  "Jwt": {
-    "Key": "Secret Key",
-    "Issuer": "localhost",
-    "Audience": "users"
-  },
   "ConnectionStrings": {
     "GigHub": "Server=(localdb)\\MSSQLLocalDB;Database=GigHub;Trusted_Connection=True;MultipleActiveResultSets=true"
+  },
+
+  "JwtSettings": {
+    "Key": "Very Secret Keyld ;qke;1ked;lk;l231kd;23kd23dk;l23kd23;ke3;",
+    "Issuer": "NetCoreGigHubIsser",
+    "Audience": "NetCoreGigHubAudience",
+    "MinutesToExpiration": 10
   }
 }

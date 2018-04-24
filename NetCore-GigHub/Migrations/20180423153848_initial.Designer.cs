@@ -11,8 +11,8 @@ using System;
 namespace NetCoreGigHub.Migrations
 {
     [DbContext(typeof(ContextGigHub))]
-    [Migration("20180420102253_Initial")]
-    partial class Initial
+    [Migration("20180423153848_initial")]
+    partial class initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -102,6 +102,24 @@ namespace NetCoreGigHub.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("NetCore_GigHub.Entities.ClaimUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ClaimType")
+                        .IsRequired()
+                        .HasMaxLength(40);
+
+                    b.Property<bool>("ClaimValue");
+
+                    b.Property<int>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Claims");
+                });
+
             modelBuilder.Entity("NetCore_GigHub.Entities.Genre", b =>
                 {
                     b.Property<int>("Id")
@@ -138,6 +156,30 @@ namespace NetCoreGigHub.Migrations
                     b.HasIndex("GenreId");
 
                     b.ToTable("Gigs");
+                });
+
+            modelBuilder.Entity("NetCore_GigHub.Entities.RoleUser", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken();
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles");
                 });
 
             modelBuilder.Entity("NetCore_GigHub.Entities.User", b =>
@@ -193,33 +235,9 @@ namespace NetCoreGigHub.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("NetCore_GigHub.Entities.UserRole", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd();
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .IsConcurrencyToken();
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(256);
-
-                    b.Property<string>("NormalizedName")
-                        .HasMaxLength(256);
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("NormalizedName")
-                        .IsUnique()
-                        .HasName("RoleNameIndex")
-                        .HasFilter("[NormalizedName] IS NOT NULL");
-
-                    b.ToTable("AspNetRoles");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
                 {
-                    b.HasOne("NetCore_GigHub.Entities.UserRole")
+                    b.HasOne("NetCore_GigHub.Entities.RoleUser")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);
@@ -243,7 +261,7 @@ namespace NetCoreGigHub.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
                 {
-                    b.HasOne("NetCore_GigHub.Entities.UserRole")
+                    b.HasOne("NetCore_GigHub.Entities.RoleUser")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade);

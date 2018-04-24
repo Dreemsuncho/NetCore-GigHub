@@ -2,7 +2,7 @@
 
 namespace NetCore_GigHub.Entities
 {
-    public class UserRole : IdentityRole<int>
+    public class RoleUser : IdentityRole<int>
     {
     }
 }

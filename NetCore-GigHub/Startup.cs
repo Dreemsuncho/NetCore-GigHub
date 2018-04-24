@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using NetCore_GigHub.Controllers;
 using NetCore_GigHub.Data;
 using NetCore_GigHub.Entities;
 using System.Text;
@@ -15,17 +15,19 @@ namespace NetCore_GigHub
     public class Startup
     {
         private readonly IConfiguration _configuration;
+        private readonly JwtSettings _jwtSettings;
 
         public Startup(IConfiguration configuration)
         {
             _configuration = configuration;
+            _jwtSettings = _GetJwtSettings();
         }
-
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSingleton(_jwtSettings);
 
-            services.AddIdentity<User, UserRole>(options =>
+            services.AddIdentity<User, RoleUser>(options =>
             {
                 options.User.RequireUniqueEmail = true;
                 options.Password.RequiredLength = 3;
@@ -40,9 +42,14 @@ namespace NetCore_GigHub
                     {
                         options.TokenValidationParameters = new TokenValidationParameters
                         {
-                            ValidIssuer = _configuration["Jwt:Issuer"],
-                            ValidAudience = _configuration["Jwt:Audience"],
-                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]))
+                            ValidateIssuer = true,
+                            ValidIssuer = _jwtSettings.Issuer,
+
+                            ValidateAudience = true,
+                            ValidAudience = _jwtSettings.Audience,
+
+                            ValidateIssuerSigningKey = true,
+                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key))
                         };
                     });
 
@@ -51,6 +58,8 @@ namespace NetCore_GigHub
             {
                 options.UseSqlServer(_configuration.GetConnectionString("GigHub"));
             });
+
+            services.AddTransient<ManagerSecurity>();
 
             services.AddMvc();
         }
@@ -76,5 +85,14 @@ namespace NetCore_GigHub
                     template: "{controller=App}/{action=Index}/{id?}");
             });
         }
+
+
+        private JwtSettings _GetJwtSettings() => new JwtSettings
+        {
+            Key = _configuration["JwtSettings:Key"],
+            Issuer = _configuration["JwtSettings:Issuer"],
+            Audience = _configuration["JwtSettings:Audience"],
+            MinutesToExpiration = int.Parse(_configuration["JwtSettings:MinutesToExpiration"])
+        };
     }
 }

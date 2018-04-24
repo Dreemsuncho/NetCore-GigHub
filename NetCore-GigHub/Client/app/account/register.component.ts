@@ -1,5 +1,8 @@
 import { Component } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
+import { Router } from "@angular/router";
+import { NotificationService } from "../Services/notification-service";
+import { SecurityService } from "../Services/security-service";
 
 
 @Component({
@@ -8,18 +11,29 @@ import { HttpClient } from "@angular/common/http";
 })
 export class RegisterComponent {
 
+    private readonly urlApiBase: string = "api/account";
+
     constructor(
-        private http: HttpClient) { }
+        private http: HttpClient,
+        private router: Router,
+        private notify: NotificationService,
+        private securityService: SecurityService) { }
 
     register(viewModel) {
-        window["res"] = viewModel;
-        this.http.post("account/register", viewModel)
+        this.securityService.register(viewModel)
             .subscribe(res => {
-                alert("SUCCESS!!");
-                console.dir(res);
+                let username: string = viewModel.Username
+                let password: string = viewModel.Password
+                this.securityService.login({ username, password })
+                    .subscribe(res => {
+                        this.notify.showSuccess(`User ${res.userName} registration successfully!`)
+                    }, err => {
+                        alert("Cannot login user after register!");
+                        console.log(err)
+                    })
             }, err => {
-                alert("ERROR!");
-                console.dir(err);
+                alert("Cannot register user!");
+                console.log(err)
             });
     }
 }

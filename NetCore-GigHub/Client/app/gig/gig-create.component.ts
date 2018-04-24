@@ -15,7 +15,7 @@ export class GigCreateComponent {
     private elementRef: ElementRef) {
   }
 
-  createGig(formValues) { 
+  createGig(formValues) {
     let url: string = "Create";
     let reqBody = formValues;
 

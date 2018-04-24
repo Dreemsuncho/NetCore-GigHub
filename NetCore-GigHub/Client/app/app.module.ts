@@ -1,21 +1,30 @@
+
+// core
 import { NgModule } from '@angular/core';
 import { FormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
+import { Routes } from '@angular/router/src/config';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from "@angular/common/http";
-
-
+// components
 import { AppComponent } from './app.component';
-import { HeaderComponent } from './shared/header.component';
-import { FooterComponent } from './shared/footer.component';
+import { HeaderComponent } from './common/header.component';
+import { FooterComponent } from './common/footer.component';
 import { RegisterComponent } from './account/register.component';
 import { LoginComponent } from './account/login.component';
-import { GigCreateComponent } from './gig-create.component';
+import { LogoutComponent } from './account/logout.component';
+import { GigCreateComponent } from './gig/gig-create.component';
+// services
+import { NotificationService } from './Services/notification-service';
+import { SecurityService } from './Services/security-service';
 
-let routes = [
+
+let routes: Routes = [
   { path: "register", component: RegisterComponent },
-  { path: "login", component: LoginComponent }
+  { path: "login", component: LoginComponent },
+  { path: "logout", component: LogoutComponent }
 ]
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -23,15 +32,21 @@ let routes = [
     FooterComponent,
     RegisterComponent,
     LoginComponent,
+    LogoutComponent,
     GigCreateComponent
   ],
-  imports: [        
+
+  imports: [
     BrowserModule,
     FormsModule,
     HttpClientModule,
     RouterModule.forRoot(routes, { useHash: true, enableTracing: false })
   ],
-  providers: [],
+
+  providers: [
+    NotificationService,
+    SecurityService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
