@@ -1,20 +1,22 @@
-import { Injectable } from "@angular/core";
-
+import { Injectable } from "@angular/core"
 
 @Injectable()
 export class NotificationService {
 
-    toastr: any = window["toastr"];
+    private toastr: any;
+    constructor() {
+        this.toastr = window["toastr"]
+    }
 
     showError(message) {
-        this.toastr.error(message);
+        this.toastr.error(message)
     }
 
     showInfo(message) {
-        this.toastr.info(message);
+        this.toastr.info(message)
     }
 
     showSuccess(message) {
-        this.toastr.success(message);
+        this.toastr.success(message)
     }
 }

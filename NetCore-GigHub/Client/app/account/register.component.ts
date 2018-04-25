@@ -27,13 +27,15 @@ export class RegisterComponent {
                 this.securityService.login({ username, password })
                     .subscribe(res => {
                         this.notify.showSuccess(`User ${res.userName} registration successfully!`)
+                        console.dir(res);
                     }, err => {
-                        alert("Cannot login user after register!");
-                        console.log(err)
+                        // err.forEach(e => this.notify.showError(e))
+                        this.notify.showError(err.error)
+                        console.dir(err);
                     })
             }, err => {
-                alert("Cannot register user!");
-                console.log(err)
+                err.error.forEach(msg => this.notify.showError(msg))
+                console.dir(err)
             });
     }
 }

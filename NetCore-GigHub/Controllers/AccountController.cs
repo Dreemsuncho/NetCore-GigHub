@@ -37,7 +37,7 @@ namespace NetCore_GigHub.Controllers
         [HttpPost]
         public async Task<ActionResult> Register([FromBody]ViewModelRegister viewModel, string urlReturn)
         {
-            ActionResult response = null;
+            var errors = new List<string>();
 
             if (ModelState.IsValid)
             {
@@ -49,36 +49,52 @@ namespace NetCore_GigHub.Controllers
 
                 var result = await _userManager.CreateAsync(user, viewModel.Password);
 
-                if (result.Succeeded)
-                    response = StatusCode(StatusCodes.Status201Created);
-                else
-                    response = StatusCode(StatusCodes.Status400BadRequest, result.Errors);
+                if (!result.Succeeded)
+                    errors.AddRange(result.Errors.Select(err => err.Description));
             }
             else
             {
-                response = StatusCode(StatusCodes.Status400BadRequest, ModelState.Values);
+                errors.AddRange(_GetModelStateErrors());
             }
 
-            return response;
+            if (errors.Count == 0)
+                return StatusCode(StatusCodes.Status201Created);
+            else
+                return StatusCode(StatusCodes.Status400BadRequest, errors);
         }
 
+        private IEnumerable<string> _GetModelStateErrors()
+        {
+            var errors = new List<string>();
+
+            ModelState.Values.ToList()
+                .ForEach(v => errors.AddRange(v.Errors.Select(e => e.ErrorMessage)));
+
+            return errors;
+        }
 
         [HttpPost]
         public async Task<ActionResult> Login([FromBody]ViewModelLogin viewModel)
         {
+            AuthUser authObject = null;
+            var errors = new List<string>();
+
             if (ModelState.IsValid)
             {
-                AuthUser authObject = await _managerSecurity.ValidateUser(viewModel);
+                authObject = await _managerSecurity.ValidateUser(viewModel);
 
-                if (authObject.IsAuthenticated)
-                    return StatusCode(StatusCodes.Status200OK, authObject);
-                else
-                    return StatusCode(StatusCodes.Status400BadRequest, new { error = "Username or password is incorrect!" });
+                if (!authObject.IsAuthenticated)
+                    errors.Add("Username or password incorrect!");
             }
             else
             {
-                return StatusCode(StatusCodes.Status400BadRequest, ModelState.Values);
+                errors.AddRange(_GetModelStateErrors());
             }
+
+            if (errors.Count == 0)
+                return StatusCode(StatusCodes.Status200OK, authObject);
+            else
+                return StatusCode(StatusCodes.Status400BadRequest, errors);
         }
     }
 

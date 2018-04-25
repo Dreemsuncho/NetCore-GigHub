@@ -34,8 +34,8 @@ export class LoginComponent implements OnInit {
                 this.notify.showSuccess(`User ${res.userName} logged in successful`)
                 console.dir(res)
             }, err => {
-                this.notify.showError("Cannot login user!")
-                console.dir(err);
+                err.error.forEach(msg => this.notify.showError(msg))
+                console.dir(err)
             })
     }
 }
