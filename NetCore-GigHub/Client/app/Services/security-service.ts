@@ -9,8 +9,10 @@ import { NotificationService } from "./notification-service";
 @Injectable()
 export class SecurityService {
 
-    private readonly urlApiBase: string = "api/account";
-    private readonly tokenKey = "bearerToken"
+    private readonly urlApiBase: string = "api/account"
+    private readonly userIdKey: string = "userId"
+    private readonly userNameKey: string = "userName"
+    private readonly tokenKey: string = "bearerToken"
     public authObject: AuthObject = new AuthObject;
 
     constructor(
@@ -25,6 +27,8 @@ export class SecurityService {
         return this.http.post<AuthObject>(`${this.urlApiBase}/login`, viewModel)
             .pipe(tap(res => {
                 Object.assign(this.authObject, res);
+                localStorage.setItem(this.userIdKey, "" + this.authObject.userId);
+                localStorage.setItem(this.userNameKey, this.authObject.userName);
                 localStorage.setItem(this.tokenKey, this.authObject.bearerToken);
             }));
     }
@@ -34,25 +38,29 @@ export class SecurityService {
     }
 
     private resetAuthObject() {
+        this.authObject.userId = null
         this.authObject.userName = null
         this.authObject.bearerToken = null
         this.authObject.isAuthenticated = false
 
         this.authObject.claims = []
+        localStorage.removeItem(this.userIdKey)
+        localStorage.removeItem(this.userNameKey)
         localStorage.removeItem(this.tokenKey)
     }
 }
 
 class AuthObject {
-    userName: string;
-    bearerToken: string;
-    isAuthenticated: boolean = false;
-    claims: ClaimUser[] = [];
+    userId: number
+    userName: string
+    bearerToken: string
+    isAuthenticated: boolean = false
+    claims: ClaimUser[] = []
 }
 
 class ClaimUser {
-    claimId: number;
-    userId: number;
-    claimType: string;
-    claimValue: string;
+    claimId: number
+    userId: number
+    claimType: string
+    claimValue: string
 }

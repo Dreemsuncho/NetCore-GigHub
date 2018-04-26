@@ -2,7 +2,6 @@
 
 
 <form #ctx="ngForm" (ngSubmit)="createGig(ctx.value)">
-
     <div class="form-group">
         <label for="Venue">Venue</label>
         <input ngModel type="text" class="form-control" name="Venue" id="Venue">
@@ -19,10 +18,9 @@
     </div>
 
     <div class="form-group">
-        <label for="Genre">Genre</label>
-        <select ngModel class="form-control" name="Genre" id="Genre">
-            <option></option>
-            <option *ngFor="let genre of genres" value="{{ genre.Id }}">{{ genre.Name }}</option>
+        <label for="GenreId">Genre</label>
+        <select ngModel class="form-control" name="GenreId" id="GenreId">
+            <option *ngFor="let genre of genres" value="{{ genre.id }}">{{ genre.name }}</option>
         </select>
     </div>
 

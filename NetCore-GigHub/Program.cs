@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore;
+﻿using System;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 
@@ -12,14 +13,15 @@ namespace NetCore_GigHub
         }
 
         public static IWebHost BuildWebHost(string[] args) =>
-        WebHost.CreateDefaultBuilder(args)
-            .ConfigureAppConfiguration((ctx, builder) =>
-            {
-                builder.Sources.Clear();
-                builder.AddJsonFile("config.json", optional: false, reloadOnChange: true)
-                    .AddEnvironmentVariables();
-            })
-            .UseStartup<Startup>()
-            .Build();
+            WebHost.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration(_SetupConfig)
+                .UseStartup<Startup>()
+                .Build();
+
+        private static void _SetupConfig(WebHostBuilderContext ctx, IConfigurationBuilder builder)
+        {
+            builder.Sources.Clear();
+            builder.AddJsonFile("config.json", optional: false, reloadOnChange: true).AddEnvironmentVariables();
+        }
     }
 }

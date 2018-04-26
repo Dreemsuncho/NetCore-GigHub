@@ -1,13 +1,17 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using FluentValidation;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Rewrite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using NetCore_GigHub.Controllers;
 using NetCore_GigHub.Data;
 using NetCore_GigHub.Entities;
+using NetCore_GigHub.Managers;
+using NetCore_GigHub.Models;
+using NetCore_GigHub.ViewModels;
 using System.Text;
 
 namespace NetCore_GigHub
@@ -61,7 +65,11 @@ namespace NetCore_GigHub
 
             services.AddTransient<ManagerSecurity>();
 
-            services.AddMvc();
+            services.AddMvc().AddFluentValidation(options =>
+            {
+                options.RegisterValidatorsFromAssemblyContaining<VmBaseValidator>();
+                ValidatorOptions.CascadeMode = CascadeMode.StopOnFirstFailure;
+            });
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

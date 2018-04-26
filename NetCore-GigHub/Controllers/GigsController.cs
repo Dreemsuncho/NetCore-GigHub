@@ -1,14 +1,15 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using NetCore_GigHub.Data;
 using NetCore_GigHub.Entities;
 using NetCore_GigHub.ViewModels;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace NetCore_GigHub.Controllers
 {
-    [Authorize]
-    public class GigsController : Controller
+    //[Authorize]
+    public class GigsController : BaseController
     {
         private ContextGigHub _context;
 
@@ -18,32 +19,38 @@ namespace NetCore_GigHub.Controllers
         }
 
         [HttpGet]
-        public ActionResult Create()
+        public ActionResult GetGenres()
         {
-            var genres = _context.Genres.AsEnumerable();
-            return View(genres);
+            var genres = _context.Genres.ToList();
+            return StatusCode(StatusCodes.Status200OK, genres);
         }
 
         [HttpPost]
-        public ActionResult Create([FromBody]ViewModelGig model)
+        public ActionResult Create([FromBody]ViewModelGig viewModel)
         {
+            var errors = new List<string>();
+
             if (ModelState.IsValid)
             {
                 _context.Gigs.Add(new Gig
                 {
-                    Venue = model.Venue,
-                    DateTime = model.GetDateTime(),
-                    GenreId = model.Genre,
-                    //ArtistId = User.Identity.Name
+                    Venue = viewModel.Venue,
+                    DateTime = viewModel.GetDateTime(),
+                    GenreId = viewModel.GenreId,
+                    ArtistId = viewModel.ArtistId
                 });
 
                 _context.SaveChanges();
-                return Created(HttpContext.Request.Path, model);
             }
             else
             {
-                return BadRequest(ModelState.Values);
+                errors.AddRange(_GetModelStateErrors());
             }
+
+            if (errors.Count == 0)
+                return StatusCode(StatusCodes.Status200OK);
+            else
+                return StatusCode(StatusCodes.Status400BadRequest, errors);
         }
     }
 }

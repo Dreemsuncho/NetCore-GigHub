@@ -22,7 +22,8 @@ import { SecurityService } from './Services/security-service';
 let routes: Routes = [
   { path: "register", component: RegisterComponent },
   { path: "login", component: LoginComponent },
-  { path: "logout", component: LogoutComponent }
+  { path: "logout", component: LogoutComponent },
+  { path: "gigs/create", component: GigCreateComponent },
 ]
 
 @NgModule({
