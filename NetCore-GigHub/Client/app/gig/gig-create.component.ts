@@ -29,7 +29,9 @@ export class GigCreateComponent implements OnInit {
 
   createGig(formValues) {
     let reqBody = formValues;
-    reqBody.artistId = localStorage.getItem("userId")
+    reqBody.ArtistId = localStorage.getItem("userId")
+    if (reqBody.GenreId === "")
+      reqBody.GenreId = "0";
 
     this.http.post("gigs/create", reqBody)
       .subscribe(res => {

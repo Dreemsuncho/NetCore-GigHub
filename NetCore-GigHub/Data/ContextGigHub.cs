@@ -30,6 +30,9 @@ namespace NetCore_GigHub.Data
                 cfg.Property(u => u.Email)
                 .HasMaxLength(40)
                 .IsRequired();
+
+                builder.Entity<User>()
+                    .ToTable("Users");
             });
 
             builder.Entity<Gig>(cfg =>

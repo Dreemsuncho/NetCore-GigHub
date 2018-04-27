@@ -10,9 +10,9 @@ namespace NetCore_GigHub.ViewModels
         public string PasswordRepeat { get; set; }
     }
 
-    public class Validator : AbstractValidator<ViewModelRegister>
+    public class VmRegisterValidator : AbstractValidator<ViewModelRegister>
     {
-        public Validator()
+        public VmRegisterValidator()
         {
             RuleFor(x => x.Email)
                 .NotEmpty()
