@@ -1,0 +1,34 @@
+<div class="container">
+
+    <h2 class="voffset4">{{ pageTitle }}</h2>
+
+    <ul class="voffset3" id="gigs">
+        <li *ngFor="let gig of gigs">
+            <div class="date">
+                <div class="month">{{ gig.dateTime | date:"MMM" }}</div>
+                <div class="day">{{ gig.dateTime | date:"dd" }} </div>
+            </div>
+
+            <div class="details hoffset3">
+                <span class="artist">
+                    {{ gig.artist.userName }}
+                    <button *ngIf="showActions" (click)="toggleFollow('Id')" class="btn btn-sm btn-link float-right">
+                        Follow
+                    </button>
+                </span>
+
+                <span class="genre">
+                    {{ gig.genre.name }}
+                    <button *ngIf="showActions" (click)="toggleGoing('Id')" class="btn btn-sm float-right">
+                        Going?
+                    </button>
+                </span>
+            </div>
+        </li>
+
+        <div *ngIf="gigs.length === 0" class="col-sm">
+            No future gigs to show.
+        </div>
+
+    </ul>
+</div>

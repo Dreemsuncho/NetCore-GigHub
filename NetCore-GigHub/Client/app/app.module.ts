@@ -14,12 +14,14 @@ import { RegisterComponent } from './account/register.component';
 import { LoginComponent } from './account/login.component';
 import { LogoutComponent } from './account/logout.component';
 import { GigCreateComponent } from './gig/gig-create.component';
+import { GigsUpcomingComponent } from './gig/gigs-upcoming.component';
 // services
 import { NotificationService } from './Services/notification-service';
 import { SecurityService } from './Services/security-service';
 
 
 let routes: Routes = [
+  { path: "", component: GigsUpcomingComponent },
   { path: "register", component: RegisterComponent },
   { path: "login", component: LoginComponent },
   { path: "logout", component: LogoutComponent },
@@ -34,7 +36,8 @@ let routes: Routes = [
     RegisterComponent,
     LoginComponent,
     LogoutComponent,
-    GigCreateComponent
+    GigCreateComponent,
+    GigsUpcomingComponent
   ],
 
   imports: [
