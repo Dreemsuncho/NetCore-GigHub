@@ -9,8 +9,7 @@ import { Component } from "@angular/core";
             This is GigHub Application Written in .NET Core & Angular
         </h1>
         <p class="lead mt-1">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-            Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            For full feature use, you have to <a routerLink="register">register</a> account, but if you don't want to sign up, you can still look at the public side of GigHub application.
         </p>
         <p class="lead mt-1">
             <a routerLink="gigs/upcoming" class="btn btn-primary btn-lg" role="button">See Upcoming Gigs</a>

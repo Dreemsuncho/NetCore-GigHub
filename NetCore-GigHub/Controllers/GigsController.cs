@@ -1,14 +1,15 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using NetCore_GigHub.Data;
 using NetCore_GigHub.Entities;
 using NetCore_GigHub.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace NetCore_GigHub.Controllers
 {
-    //[Authorize]
     public class GigsController : BaseController
     {
         private ContextGigHub _context;
@@ -23,6 +24,18 @@ namespace NetCore_GigHub.Controllers
         {
             var genres = _context.Genres.ToList();
             return StatusCode(StatusCodes.Status200OK, genres);
+        }
+
+        [HttpGet]
+        public ActionResult GetUpcoming()
+        {
+            var res = _context.Gigs
+                .Where(g => g.DateTime > DateTime.Now)
+                .Include(x => x.Genre)
+                .Include(x => x.Artist)
+                .ToList();
+
+            return StatusCode(StatusCodes.Status200OK, res);
         }
 
         [HttpPost]

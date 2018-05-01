@@ -3,21 +3,21 @@
 </h2>
 
 <div class="row mt-4 d-flex justify-content-between">
-    <div *ngFor="let gig of gigs" id="gigs" class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 my-4 p-5">
-
+    <div *ngFor="let gig of gigs" id="gigs" class="col-12 col-sm-12 col-md-6 col-lg-4 col-xl-4 my-4 p-5 rounded"><!-- position-relative-absolute -->
         <div class="row">
+
             <div class="col-2">
                 <section class="date">
                     <section class="month">{{ gig.dateTime | date:"MMM" }}</section>
                     <section class="day">{{ gig.dateTime | date:"dd" }} </section>
                 </section>
             </div>
-            <div class="col-1"></div>
+            <div class="mx-3"></div>
             <div class="col">
                 <strong>{{ gig.artist.userName }}</strong>
                 <section class="mt-2">
                     {{ gig.genre.name }}
-                    <button *ngIf="showActions" (click)="toggleGoing(gig.id)" class="btn btn-sm float-right mr-5">
+                    <button *ngIf="showActions" (click)="toggleGoing(gig.id)" class="btn btn-sm float-right mr-3">
                         Going?
                     </button>
                 </section>

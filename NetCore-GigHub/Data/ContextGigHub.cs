@@ -15,11 +15,18 @@ namespace NetCore_GigHub.Data
         public DbSet<Gig> Gigs { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<ClaimUser> Claims { get; set; }
+        public DbSet<Attendance> Attendances { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
+            builder.Entity<Attendance>(cfg =>
+            {
+                cfg.HasKey(a => new { a.GigId, a.UserId });
+                cfg.HasOne(a => a.Gig).WithMany().OnDelete(DeleteBehavior.Restrict);
+                cfg.HasOne(a => a.User).WithMany().OnDelete(DeleteBehavior.Restrict);
+            });
 
             builder.Entity<User>(cfg =>
             {

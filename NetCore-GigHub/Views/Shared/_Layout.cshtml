@@ -10,13 +10,16 @@
     <script src="~/lib/jquery/jquery.min.js"></script>
     <script src="~/lib/bootstrap/js/bootstrap.min.js"></script>
     <script src="~/lib/toastr/toastr.min.js"></script>
+
+    <!--JS-->
+    <link href="~/css/styles.css" rel="stylesheet" />
+    <!--CSS-->
 </head>
 
 <body>
-    <section id="main">
+    <section class="container">
         @RenderBody()
     </section>
-
 
     @RenderSection(name: "Scripts", required: false)
 </body>

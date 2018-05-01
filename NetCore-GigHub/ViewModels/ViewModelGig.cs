@@ -6,10 +6,10 @@ namespace NetCore_GigHub.ViewModels
 {
     public class ViewModelGig
     {
-        public int ArtistId;
         public string Venue { get; set; }
         public string Date { get; set; }
         public string Time { get; set; }
+        public int ArtistId { get; set; }
         public int GenreId { get; set; }
 
         public DateTime GetDateTime()
@@ -26,19 +26,11 @@ namespace NetCore_GigHub.ViewModels
     {
         public VmGigValidator()
         {
-            RuleFor(x => x.ArtistId)
-                .NotEmpty()
-                .WithMessage("Artist is required");
-
             RuleFor(x => x.Venue)
                 .NotEmpty()
                 .WithMessage("Venue is required")
                 .MaximumLength(40)
                 .WithMessage("Venue name too long");
-
-            RuleFor(x => x.GenreId)
-                .NotEmpty()
-                .WithMessage("Genre is required");
 
             RuleFor(x => x.Date)
                 .Must(_ValidateDateFormat)
@@ -49,6 +41,14 @@ namespace NetCore_GigHub.ViewModels
             RuleFor(x => x.Time)
                 .Must(_ValidateTimeFormat)
                 .WithMessage("Invalid time format, must be in 'HH/mm AM|PM'!");
+
+            RuleFor(x => x.ArtistId)
+                .NotEmpty()
+                .WithMessage("Artist is required");
+
+            RuleFor(x => x.GenreId)
+                .NotEmpty()
+                .WithMessage("Genre is required");
         }
 
         private bool _ValidateFutureDate(string value)

@@ -33,6 +33,7 @@
     "@angular/compiler-cli": "^5.2.0",
     "@angular/language-service": "^5.2.0",
     "gulp": "^3.9.1",
+    "gulp-sass": "^4.0.1",
     "typescript": "~2.5.3"
   }
 }

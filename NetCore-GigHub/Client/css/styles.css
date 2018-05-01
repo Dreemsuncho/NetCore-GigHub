@@ -15,7 +15,7 @@ label:hover {
 
 /* gigs (Home View) */
 #gigs .date {
-    background: red;
+    background: rgb(192, 77, 77);
     color: white;
     text-align: center;
     width: 60px;

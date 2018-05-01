@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
-using NetCore_GigHub.Controllers;
 using NetCore_GigHub.Data;
 using NetCore_GigHub.Entities;
 using NetCore_GigHub.Models;
