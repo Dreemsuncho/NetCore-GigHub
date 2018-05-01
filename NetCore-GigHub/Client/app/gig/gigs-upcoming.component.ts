@@ -8,7 +8,7 @@ import { HttpClient } from "@angular/common/http";
 })
 export class GigsUpcomingComponent implements OnInit {
 
-    public pageTitle:string = "Upcoming gigs"
+    public pageTitle: string = "Upcoming gigs"
     public gigs: VmGig[] = []
     public showActions: boolean = true
 
@@ -36,7 +36,10 @@ export class GigsUpcomingComponent implements OnInit {
 
 class VmGig {
     id: number
-    artist: { userName: string }
+    artist: {
+        userName: string,
+        id: number
+    }
     dateTime: Date
     genre: { name: string }
     venue: string

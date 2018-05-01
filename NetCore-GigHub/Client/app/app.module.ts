@@ -8,6 +8,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from "@angular/common/http";
 // components
 import { AppComponent } from './app.component';
+import { HomeComponent } from './home.component';
 import { HeaderComponent } from './common/header.component';
 import { FooterComponent } from './common/footer.component';
 import { RegisterComponent } from './account/register.component';
@@ -21,16 +22,18 @@ import { SecurityService } from './Services/security-service';
 
 
 let routes: Routes = [
-  { path: "", component: GigsUpcomingComponent },
+  { path: "", component: HomeComponent },
   { path: "register", component: RegisterComponent },
   { path: "login", component: LoginComponent },
   { path: "logout", component: LogoutComponent },
   { path: "gigs/create", component: GigCreateComponent },
+  { path: "gigs/upcoming", component: GigsUpcomingComponent },
 ]
 
 @NgModule({
   declarations: [
     AppComponent,
+    HomeComponent,
     HeaderComponent,
     FooterComponent,
     RegisterComponent,
