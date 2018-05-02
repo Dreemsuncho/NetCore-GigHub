@@ -18,13 +18,10 @@ export class GigCreateComponent implements OnInit {
     private notify: NotificationService) { }
 
   ngOnInit() {
-    this.http.get("gigs/getgenres")
+    this.http.get("api/gigs/getgenres")
       .subscribe(res => {
         Object.assign(this.genres, res)
-      }, err => {
-        alert("Error!");
-        console.dir(err);
-      })
+      });
   }
 
   createGig(formValues) {
@@ -33,14 +30,11 @@ export class GigCreateComponent implements OnInit {
     if (reqBody.GenreId === "")
       reqBody.GenreId = "0";
 
-    this.http.post("gigs/create", reqBody)
+    this.http.post("api/gigs/create", reqBody)
       .subscribe(res => {
         console.dir(res)
         this.router.navigate([""])
         this.notify.showSuccess("Your gig was created!")
-      }, err => {
-        console.dir(err)
-        err.error.forEach(msg => this.notify.showError(msg))
       });
   }
 }

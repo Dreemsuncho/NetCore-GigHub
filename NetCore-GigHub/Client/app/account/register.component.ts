@@ -28,11 +28,7 @@ export class RegisterComponent {
                     .subscribe(res => {
                         this.notify.showSuccess(`User ${res.userName} registration successfully!`)
                         console.dir(res);
-                    }, err => {
-                        err.error.forEach(msg => this.notify.showError(msg))
                     })
-            }, err => {
-                err.error.forEach(msg => this.notify.showError(msg))
-            });
+            })
     }
 }

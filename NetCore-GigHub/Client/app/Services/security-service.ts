@@ -3,8 +3,6 @@ import { HttpClient } from "@angular/common/http";
 
 import { Observable } from "rxjs/Observable";
 import { tap } from "rxjs/operators";
-import { NotificationService } from "./notification-service";
-
 
 @Injectable()
 export class SecurityService {
@@ -13,11 +11,11 @@ export class SecurityService {
     private readonly userIdKey: string = "userId"
     private readonly userNameKey: string = "userName"
     private readonly tokenKey: string = "bearerToken"
+
     public authObject: AuthObject = new AuthObject;
 
-    constructor(
-        private http: HttpClient,
-        private notify: NotificationService) { }
+    constructor(private http: HttpClient) {
+    }
 
     register(viewModel) {
         return this.http.post(`${this.urlApiBase}/register`, viewModel);
@@ -35,6 +33,10 @@ export class SecurityService {
 
     logout() {
         this.resetAuthObject()
+    }
+
+    getTokenBearer() {
+        return localStorage.getItem(this.tokenKey);
     }
 
     private resetAuthObject() {

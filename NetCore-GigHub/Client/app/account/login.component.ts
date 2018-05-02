@@ -29,13 +29,10 @@ export class LoginComponent implements OnInit {
         this.securityService.login(viewModel)
             .subscribe(res => {
                 if (this.returnUrl) {
-                    this.router.navigateByUrl(this.returnUrl)
+                    this.router.navigateByUrl("gigs/" + this.returnUrl.split("/").pop().replace("get", ""))
                 }
                 this.notify.showSuccess(`User ${res.userName} logged in successful`)
                 console.dir(res)
-            }, err => {
-                err.error.forEach(msg => this.notify.showError(msg))
-                console.dir(err)
             })
     }
 }

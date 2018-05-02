@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-
+import { Router, NavigationExtras } from '@angular/router';
 
 @Component({
     selector: "gigs-upcoming",
@@ -12,16 +12,15 @@ export class GigsUpcomingComponent implements OnInit {
     public gigs: VmGig[] = []
     public showActions: boolean = true
 
-    constructor(private http: HttpClient) { }
+    constructor(
+        private http: HttpClient,
+        private router: Router) { }
 
     ngOnInit() {
-        this.http.get<VmGig[]>("gigs/getupcoming")
+        this.http.get<VmGig[]>("api/gigs/getupcoming")
             .subscribe(res => {
                 this.gigs = res
                 console.dir(res)
-                console.dir(this.gigs)
-            }, err => {
-                console.dir(err)
             });
     }
 
