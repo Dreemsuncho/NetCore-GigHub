@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from "@angular/core"
 import { HttpClient } from "@angular/common/http"
-import { Router } from '@angular/router';
-import { NotificationService } from '../Services/notification-service';
+import { Router } from "@angular/router"
+import { NotificationService } from "../Services/notification-service"
 
 @Component({
   selector: "gig-create",
@@ -21,21 +21,21 @@ export class GigCreateComponent implements OnInit {
     this.http.get("api/gigs/getgenres")
       .subscribe(res => {
         Object.assign(this.genres, res)
-      });
+      })
   }
 
   createGig(formValues) {
-    let reqBody = formValues;
+    let reqBody = formValues
     reqBody.ArtistId = localStorage.getItem("userId")
     if (reqBody.GenreId === "")
-      reqBody.GenreId = "0";
+      reqBody.GenreId = "0"
 
     this.http.post("api/gigs/create", reqBody)
       .subscribe(res => {
         console.dir(res)
         this.router.navigate([""])
         this.notify.showSuccess("Your gig was created!")
-      });
+      })
   }
 }
 

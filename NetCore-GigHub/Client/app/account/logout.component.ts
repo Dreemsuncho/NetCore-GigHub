@@ -1,8 +1,8 @@
-import { Component, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
+import { Component, OnInit } from "@angular/core"
+import { Router } from "@angular/router"
 
-import { SecurityService } from "../Services/security-service";
-import { NotificationService } from "../Services/notification-service";
+import { SecurityService } from "../Services/security-service"
+import { NotificationService } from "../Services/notification-service"
 
 
 @Component({

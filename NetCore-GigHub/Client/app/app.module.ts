@@ -1,27 +1,27 @@
 
 // Angular
-import { NgModule } from '@angular/core';
-import { FormsModule } from "@angular/forms";
-import { RouterModule } from "@angular/router";
-import { Routes } from '@angular/router/src/config';
-import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
+import { NgModule } from "@angular/core"
+import { FormsModule } from "@angular/forms"
+import { RouterModule } from "@angular/router"
+import { Routes } from "@angular/router/src/config"
+import { BrowserModule } from "@angular/platform-browser"
+import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http"
 // Interceptors
-import { SecurityInterceptor } from './Middleware/security.interceptor';
-import { JwtInterceptor } from "./Middleware/jwt.interceptor";
+import { SecurityInterceptor } from "./Middleware/security.interceptor"
+import { JwtInterceptor } from "./Middleware/jwt.interceptor"
 // Components
-import { AppComponent } from './app.component';
-import { HomeComponent } from './home.component';
-import { HeaderComponent } from './common/header.component';
-import { FooterComponent } from './common/footer.component';
-import { RegisterComponent } from './account/register.component';
-import { LoginComponent } from './account/login.component';
-import { LogoutComponent } from './account/logout.component';
-import { GigCreateComponent } from './gig/gig-create.component';
-import { GigsUpcomingComponent } from './gig/gigs-upcoming.component';
+import { AppComponent } from "./app.component"
+import { HomeComponent } from "./home.component"
+import { HeaderComponent } from "./common/header.component"
+import { FooterComponent } from "./common/footer.component"
+import { RegisterComponent } from "./account/register.component"
+import { LoginComponent } from "./account/login.component"
+import { LogoutComponent } from "./account/logout.component"
+import { GigCreateComponent } from "./gig/gig-create.component"
+import { GigsUpcomingComponent } from "./gig/gigs-upcoming.component"
 // Services
-import { NotificationService } from './Services/notification-service';
-import { SecurityService } from './Services/security-service';
+import { NotificationService } from "./Services/notification-service"
+import { SecurityService } from "./Services/security-service"
 
 
 let routes: Routes = [

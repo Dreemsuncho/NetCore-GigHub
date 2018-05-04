@@ -1,8 +1,8 @@
-import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import { Injectable } from "@angular/core"
+import { HttpClient } from "@angular/common/http"
 
-import { Observable } from "rxjs/Observable";
-import { tap } from "rxjs/operators";
+import { Observable } from "rxjs/Observable"
+import { tap } from "rxjs/operators"
 
 @Injectable()
 export class SecurityService {
@@ -12,23 +12,23 @@ export class SecurityService {
     private readonly userNameKey: string = "userName"
     private readonly tokenKey: string = "bearerToken"
 
-    public authObject: AuthObject = new AuthObject;
+    public authObject: AuthObject = new AuthObject
 
     constructor(private http: HttpClient) {
     }
 
     register(viewModel) {
-        return this.http.post(`${this.urlApiBase}/register`, viewModel);
+        return this.http.post(`${this.urlApiBase}/register`, viewModel)
     }
 
     login(viewModel): Observable<AuthObject> {
         return this.http.post<AuthObject>(`${this.urlApiBase}/login`, viewModel)
             .pipe(tap(res => {
-                Object.assign(this.authObject, res);
-                localStorage.setItem(this.userIdKey, "" + this.authObject.userId);
-                localStorage.setItem(this.userNameKey, this.authObject.userName);
-                localStorage.setItem(this.tokenKey, this.authObject.bearerToken);
-            }));
+                Object.assign(this.authObject, res)
+                localStorage.setItem(this.userIdKey, "" + this.authObject.userId)
+                localStorage.setItem(this.userNameKey, this.authObject.userName)
+                localStorage.setItem(this.tokenKey, this.authObject.bearerToken)
+            }))
     }
 
     logout() {
@@ -36,7 +36,7 @@ export class SecurityService {
     }
 
     getTokenBearer() {
-        return localStorage.getItem(this.tokenKey);
+        return localStorage.getItem(this.tokenKey)
     }
 
     private resetAuthObject() {

@@ -1,6 +1,5 @@
-import { Component, OnInit } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { Router, NavigationExtras } from '@angular/router';
+import { Component, OnInit } from "@angular/core"
+import { HttpClient } from "@angular/common/http"
 
 @Component({
     selector: "gigs-upcoming",
@@ -13,24 +12,27 @@ export class GigsUpcomingComponent implements OnInit {
     public showActions: boolean = true
 
     constructor(
-        private http: HttpClient,
-        private router: Router) { }
+        private http: HttpClient) { }
 
     ngOnInit() {
         this.http.get<VmGig[]>("api/gigs/getupcoming")
             .subscribe(res => {
                 this.gigs = res
                 console.dir(res)
-            });
+            })
     }
 
     toggleFollow(gigId) {
         alert(gigId)
     }
-    toggleGoing(gigId) {
-        alert(gigId)
-    }
 
+    toggleGoing(gigId) {
+        this.http.post("api/attendances/attend", gigId)
+            .subscribe(res => {
+                alert("SUCCESS!")
+                console.dir(res)
+            })
+    }
 }
 
 class VmGig {

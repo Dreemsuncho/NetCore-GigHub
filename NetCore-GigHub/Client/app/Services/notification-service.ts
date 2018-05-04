@@ -3,7 +3,7 @@ import { Injectable } from "@angular/core"
 @Injectable()
 export class NotificationService {
 
-    private toastr: any;
+    private toastr: any
     constructor() {
         this.toastr = window["toastr"]
     }
