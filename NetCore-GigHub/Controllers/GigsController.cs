@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NetCore_GigHub.Data;
@@ -10,6 +12,8 @@ using System.Linq;
 
 namespace NetCore_GigHub.Controllers
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Route("api/[controller]/[action]")]
     public class GigsController : BaseController
     {
         private ContextGigHub _context;
@@ -63,7 +67,7 @@ namespace NetCore_GigHub.Controllers
             if (errors.Count == 0)
                 return StatusCode(StatusCodes.Status200OK);
             else
-                return StatusCode(StatusCodes.Status400BadRequest, errors);
+                return StatusCode(StatusCodes.Status400BadRequest, new { values = errors });
         }
     }
 }

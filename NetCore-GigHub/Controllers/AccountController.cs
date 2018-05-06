@@ -57,7 +57,7 @@ namespace NetCore_GigHub.Controllers
             if (errors.Count == 0)
                 return StatusCode(StatusCodes.Status201Created);
             else
-                return StatusCode(StatusCodes.Status400BadRequest, errors);
+                return StatusCode(StatusCodes.Status400BadRequest, new { values = errors });
         }
 
         [HttpPost]
@@ -71,7 +71,20 @@ namespace NetCore_GigHub.Controllers
                 authObject = await _managerSecurity.ValidateUser(viewModel);
 
                 if (!authObject.IsAuthenticated)
+                {
                     errors.Add("Username or password incorrect!");
+                }
+                else
+                {
+                    var result = await _signInManager.PasswordSignInAsync(
+                        userName: viewModel.Username,
+                        password: viewModel.Password,
+                        isPersistent: true,
+                        lockoutOnFailure: false);
+                    
+                    if (!result.Succeeded)
+                        errors.Add("Something happened, cannot login with this account");
+                }
             }
             else
             {
@@ -81,7 +94,7 @@ namespace NetCore_GigHub.Controllers
             if (errors.Count == 0)
                 return StatusCode(StatusCodes.Status200OK, authObject);
             else
-                return StatusCode(StatusCodes.Status400BadRequest, errors);
+                return StatusCode(StatusCodes.Status400BadRequest, new { values = errors });
         }
     }
 }

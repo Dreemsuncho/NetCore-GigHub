@@ -16,10 +16,18 @@ namespace NetCore_GigHub.Data
         public DbSet<Genre> Genres { get; set; }
         public DbSet<ClaimUser> Claims { get; set; }
         public DbSet<Attendance> Attendances { get; set; }
+        public DbSet<Following> Followings { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.Entity<Following>(cfg =>
+            {
+                cfg.HasKey(f => new { f.FollowerId, f.FolloweeId });
+                cfg.HasOne(f => f.Follower).WithMany().OnDelete(DeleteBehavior.Restrict);
+                cfg.HasOne(f => f.Follower).WithMany().OnDelete(DeleteBehavior.Restrict);
+            });
 
             builder.Entity<Attendance>(cfg =>
             {

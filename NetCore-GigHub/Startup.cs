@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Rewrite;
@@ -12,6 +13,7 @@ using NetCore_GigHub.Entities;
 using NetCore_GigHub.Managers;
 using NetCore_GigHub.Models;
 using NetCore_GigHub.ViewModels;
+using System;
 using System.Text;
 
 namespace NetCore_GigHub
@@ -42,21 +44,23 @@ namespace NetCore_GigHub
             .AddEntityFrameworkStores<ContextGigHub>();
 
             services.AddAuthentication()
-                    .AddJwtBearer(options =>
-                    {
-                        options.TokenValidationParameters = new TokenValidationParameters
-                        {
-                            ValidateIssuer = true,
-                            ValidIssuer = _jwtSettings.Issuer,
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateLifetime = true,
+                    ClockSkew = TimeSpan.FromMinutes(_jwtSettings.MinutesToExpiration),
 
-                            ValidateAudience = true,
-                            ValidAudience = _jwtSettings.Audience,
+                    ValidateIssuer = true,
+                    ValidIssuer = _jwtSettings.Issuer,
 
-                            ValidateIssuerSigningKey = true,
-                            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key))
-                        };
-                    });
+                    ValidateAudience = true,
+                    ValidAudience = _jwtSettings.Audience,
 
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key))
+                };
+            });
 
             services.AddDbContext<ContextGigHub>(options =>
             {

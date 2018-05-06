@@ -12,10 +12,11 @@ namespace NetCore_GigHub.Controllers
 
             ModelState.Values.ToList()
                 .ForEach(v =>
-                    errors.AddRange(v.Errors.Select(e =>
-                        e.Exception == null
-                            ? e.ErrorMessage
-                            : throw e.Exception)));
+                    errors.AddRange(
+                        v.Errors.Select(e =>
+                            e.Exception == null
+                                ? e.ErrorMessage
+                                : throw e.Exception)));
 
             return errors;
         }
