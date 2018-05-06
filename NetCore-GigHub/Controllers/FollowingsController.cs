@@ -8,50 +8,51 @@ using System.Linq;
 
 namespace NetCore_GigHub.Controllers
 {
-    [Route("api/[controller]/[action]")]
-    public class AttendancesController : BaseController
+    public class FollowingsController : BaseController
     {
         private readonly ContextGigHub _context;
         private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
 
-        public AttendancesController(ContextGigHub context, UserManager<User> userManager, SignInManager<User> signInManager)
+        public FollowingsController(ContextGigHub context, UserManager<User> userManager)
         {
             _context = context;
             _userManager = userManager;
-            _signInManager = signInManager;
         }
 
         [HttpPost]
-        public ActionResult Attend([FromBody]int gigId)
+        public ActionResult Follow([FromBody]int followeeId)
         {
             var errors = new List<string>();
 
-            var userId = _userManager.GetUserId(User);
+            var followerId = _userManager.GetUserId(User);
 
-            if (userId != null)
+            if (followerId != null)
             {
-                if (_context.Attendances.Any(a => a.UserId == int.Parse(userId) && a.GigId == gigId))
+
+                if (followeeId == int.Parse(followerId))
                 {
-                    errors.Add("The attendance already exists!");
+                    errors.Add("The user cannot follow himself!");
+                }
+                else if (_context.Followings.Any(f => f.FolloweeId == followeeId && f.FollowerId == int.Parse(followerId)))
+                {
+                    errors.Add("Following already exist!");
                 }
                 else
                 {
-                    var entity = new Attendance
+                    var entity = new Following
                     {
-                        GigId = gigId,
-                        UserId = int.Parse(userId)
+                        FolloweeId = followeeId,
+                        FollowerId = int.Parse(followerId)
                     };
 
-                    _context.Attendances.Add(entity);
+                    _context.Followings.Add(entity);
                     _context.SaveChanges();
                 }
             }
             else
             {
-                errors.Add("User account does not exist!");
+                errors.Add("Follower does not exist!");
             }
-
 
             if (errors.Count == 0)
                 return StatusCode(StatusCodes.Status201Created);

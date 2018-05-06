@@ -18,18 +18,22 @@ export class GigsUpcomingComponent implements OnInit {
         this.http.get<VmGig[]>("api/gigs/getupcoming")
             .subscribe(res => {
                 this.gigs = res
-                console.dir(res)
+                console.dir(res);
             })
     }
 
-    toggleFollow(gigId) {
-        alert(gigId)
+    toggleFollow() {
+        this.http.post("followings/follow", 1003)
+            .subscribe(res => {
+                alert("SUCCESS FOLLOW!")
+                console.dir(res)
+            })
     }
 
     toggleGoing(gigId) {
         this.http.post("api/attendances/attend", gigId)
             .subscribe(res => {
-                alert("SUCCESS!")
+                alert("SUCCESS Attend!")
                 console.dir(res)
             })
     }

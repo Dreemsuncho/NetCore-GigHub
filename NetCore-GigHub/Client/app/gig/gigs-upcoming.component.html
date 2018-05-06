@@ -14,7 +14,12 @@
             </div>
             <div class="mx-3"></div>
             <div class="col">
-                <strong>{{ gig.artist.userName }}</strong>
+                <section class="mt-2">
+                    <strong>{{ gig.artist.userName }}</strong>
+                    <button *ngIf="showActions" (click)="toggleFollow(gig.id)" class="btn btn-link float-right mr-3">
+                        Follow
+                    </button>
+                </section>
                 <section class="mt-2">
                     {{ gig.genre.name }}
                     <button *ngIf="showActions" (click)="toggleGoing(gig.id)" class="btn btn-sm float-right mr-3">
