@@ -19,11 +19,13 @@ export class RegisterComponent {
             .subscribe(() => {
                     let username: string = viewModel.Username
                     let password: string = viewModel.Password
+
                     this.securityService.login({ username, password })
                         .subscribe(res => {
                             this.notify.showSuccess(`User ${res.userName} registration successfully!`)
                             console.dir(res)
                         })
+                        
                 })
     }
 }

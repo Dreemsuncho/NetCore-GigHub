@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using NetCore_GigHub.Entities;
 using NetCore_GigHub.Managers;
 using NetCore_GigHub.Models;
 using NetCore_GigHub.ViewModels;
@@ -14,22 +12,14 @@ namespace NetCore_GigHub.Controllers
     [Route("api/[controller]/[action]")]
     public class AccountController : BaseController
     {
-        private readonly JwtSettings _jwtSettings;
-        private readonly SignInManager<User> _signInManager;
-        private readonly UserManager<User> _userManager;
         private readonly ManagerSecurity _managerSecurity;
 
-        public AccountController(
-            JwtSettings jwtSettings,
-            SignInManager<User> signInManager,
-            UserManager<User> userManager,
-            ManagerSecurity managerSecurity)
+
+        public AccountController(ManagerSecurity managerSecurity)
         {
-            _signInManager = signInManager;
-            _userManager = userManager;
-            _jwtSettings = jwtSettings;
             _managerSecurity = managerSecurity;
         }
+
 
         [HttpPost]
         public async Task<ActionResult> Register([FromBody]ViewModelRegister viewModel, string urlReturn)
@@ -38,13 +28,10 @@ namespace NetCore_GigHub.Controllers
 
             if (ModelState.IsValid)
             {
-                var user = new User
-                {
-                    UserName = viewModel.Username,
-                    Email = viewModel.Email
-                };
-
-                var result = await _userManager.CreateAsync(user, viewModel.Password);
+                var result = await _managerSecurity.CreateUserAsync(
+                    userName: viewModel.Username,
+                    password: viewModel.Password,
+                    email: viewModel.Email);
 
                 if (!result.Succeeded)
                     errors.AddRange(result.Errors.Select(err => err.Description));
@@ -59,6 +46,7 @@ namespace NetCore_GigHub.Controllers
             else
                 return StatusCode(StatusCodes.Status400BadRequest, new { values = errors });
         }
+
 
         [HttpPost]
         public async Task<ActionResult> Login([FromBody]ViewModelLogin viewModel)

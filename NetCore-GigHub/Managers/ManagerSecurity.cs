@@ -21,6 +21,7 @@ namespace NetCore_GigHub.Managers
         private readonly UserManager<User> _userManager;
         private readonly ContextGigHub _context;
 
+
         public ManagerSecurity(
             JwtSettings jwtSettings,
             SignInManager<User> signInManager,
@@ -33,11 +34,29 @@ namespace NetCore_GigHub.Managers
             _jwtSettings = jwtSettings;
         }
 
+
+        public Task<IdentityResult> CreateUserAsync(string userName, string email, string password)
+        {
+            var user = new User
+            {
+                UserName = userName,
+                Email = email
+            };
+            return _userManager.CreateAsync(user, password);
+        }
+
+
+        public Task<SignInResult> SignInAsync(string userName, string password, bool isPersistent, bool lockoutOnFailure)
+        {
+            return _signInManager.PasswordSignInAsync(userName, password, isPersistent, lockoutOnFailure);
+        }
+
+
         public async Task<AuthUser> ValidateUser(ViewModelLogin viewModel)
         {
             var authObject = new AuthUser();
 
-            var result = await _signInManager.PasswordSignInAsync(
+            var result = await SignInAsync(
                 userName: viewModel.Username,
                 password: viewModel.Password,
                 isPersistent: true,
@@ -69,6 +88,7 @@ namespace NetCore_GigHub.Managers
                 Claims = claimsUser
             };
         }
+
 
         private string _BuildJwtBearer(string username, List<ClaimUser> claimsUser)
         {
