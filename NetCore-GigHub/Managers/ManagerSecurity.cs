@@ -37,14 +37,16 @@ namespace NetCore_GigHub.Managers
         {
             var authObject = new AuthUser();
 
-            var user = await _userManager.FindByNameAsync(viewModel.Username);
-            if (user != null)
+            var result = await _signInManager.PasswordSignInAsync(
+                userName: viewModel.Username,
+                password: viewModel.Password,
+                isPersistent: true,
+                lockoutOnFailure: false);
+
+            if (result.Succeeded)
             {
-                var result = await _signInManager.CheckPasswordSignInAsync(user, viewModel.Password, lockoutOnFailure: false);
-                if (result.Succeeded)
-                {
-                    authObject = _BuildUserAuth(user);
-                }
+                var user = await _userManager.FindByNameAsync(viewModel.Username);
+                authObject = _BuildUserAuth(user);
             }
 
             return authObject;

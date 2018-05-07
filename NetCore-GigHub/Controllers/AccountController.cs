@@ -71,20 +71,7 @@ namespace NetCore_GigHub.Controllers
                 authObject = await _managerSecurity.ValidateUser(viewModel);
 
                 if (!authObject.IsAuthenticated)
-                {
                     errors.Add("Username or password incorrect!");
-                }
-                else
-                {
-                    var result = await _signInManager.PasswordSignInAsync(
-                        userName: viewModel.Username,
-                        password: viewModel.Password,
-                        isPersistent: true,
-                        lockoutOnFailure: false);
-                    
-                    if (!result.Succeeded)
-                        errors.Add("Something happened, cannot login with this account");
-                }
             }
             else
             {
