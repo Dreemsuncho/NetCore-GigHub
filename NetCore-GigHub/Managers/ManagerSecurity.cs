@@ -35,7 +35,7 @@ namespace NetCore_GigHub.Managers
         }
 
 
-        public Task<IdentityResult> CreateUserAsync(string userName, string email, string password)
+        internal Task<IdentityResult> CreateUserAsync(string userName, string email, string password)
         {
             var user = new User
             {
@@ -46,13 +46,19 @@ namespace NetCore_GigHub.Managers
         }
 
 
-        public Task<SignInResult> SignInAsync(string userName, string password, bool isPersistent, bool lockoutOnFailure)
+        internal Task<SignInResult> SignInAsync(string userName, string password, bool isPersistent, bool lockoutOnFailure)
         {
             return _signInManager.PasswordSignInAsync(userName, password, isPersistent, lockoutOnFailure);
         }
 
 
-        public async Task<AuthUser> ValidateUser(ViewModelLogin viewModel)
+        internal Task SignOutAsync()
+        {
+            return _signInManager.SignOutAsync();
+        }
+
+
+        internal async Task<AuthUser> ValidateUser(ViewModelLogin viewModel)
         {
             var authObject = new AuthUser();
 
@@ -70,6 +76,7 @@ namespace NetCore_GigHub.Managers
 
             return authObject;
         }
+
 
         private AuthUser _BuildUserAuth(User user)
         {
@@ -100,7 +107,8 @@ namespace NetCore_GigHub.Managers
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
-            claimsUser.ForEach(c => claimsJwt.Add(new Claim(c.ClaimType, c.ClaimValue)));
+            claimsUser.ForEach(c => 
+                claimsJwt.Add(new Claim(c.ClaimType, c.ClaimValue)));
 
             var token = new JwtSecurityToken(
                 issuer: _jwtSettings.Issuer,

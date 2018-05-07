@@ -24,14 +24,14 @@ namespace NetCore_GigHub.Controllers
         }
 
         [HttpGet]
-        public ActionResult GetGenres()
+        public ActionResult Genres()
         {
             var genres = _context.Genres.ToList();
             return StatusCode(StatusCodes.Status200OK, genres);
         }
 
         [HttpGet]
-        public ActionResult GetUpcoming()
+        public ActionResult Upcoming()
         {
             var res = _context.Gigs
                 .Where(g => g.DateTime > DateTime.Now)

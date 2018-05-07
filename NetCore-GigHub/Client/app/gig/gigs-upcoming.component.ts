@@ -15,10 +15,10 @@ export class GigsUpcomingComponent implements OnInit {
         private http: HttpClient) { }
 
     ngOnInit() {
-        this.http.get<VmGig[]>("api/gigs/getupcoming")
+        this.http.get<VmGig[]>("api/gigs/upcoming")
             .subscribe(res => {
                 this.gigs = res
-                console.dir(res);
+                console.dir(res)
             })
     }
 

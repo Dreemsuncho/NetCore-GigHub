@@ -17,7 +17,7 @@ export class LogoutComponent implements OnInit {
 
     ngOnInit() {
         this.securityService.logout()
-        this.router.navigate["/"]
+        this.router.navigate(["/"])
         this.notify.showSuccess("Logout Successfully")
     }
 }

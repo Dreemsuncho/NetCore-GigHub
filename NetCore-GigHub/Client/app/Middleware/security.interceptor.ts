@@ -18,8 +18,8 @@ export class SecurityInterceptor implements HttpInterceptor {
     return next.handle(req).pipe(
       tap(() => { }, err => {
         if (err instanceof HttpErrorResponse && err.status === 401) {
-          let returnUrl: string = err.url.split("/").pop().replace("get", "")
-          this.router.navigate(["login"], { queryParams: { returnUrl: returnUrl } })
+          let returnUrl: string = err.url.split("api").pop()
+          this.router.navigate(["login"], { queryParams: { returnUrl } })
           this.notify.showError("You have to login for access this route")
         }
         else if (err.error.values instanceof Array) {

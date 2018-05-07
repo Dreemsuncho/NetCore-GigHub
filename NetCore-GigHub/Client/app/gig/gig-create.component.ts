@@ -18,7 +18,7 @@ export class GigCreateComponent implements OnInit {
     private notify: NotificationService) { }
 
   ngOnInit() {
-    this.http.get("api/gigs/getgenres")
+    this.http.get("api/gigs/genres")
       .subscribe(res => {
         Object.assign(this.genres, res)
       })

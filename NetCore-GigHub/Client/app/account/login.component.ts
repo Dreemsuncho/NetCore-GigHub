@@ -26,7 +26,9 @@ export class LoginComponent implements OnInit {
         this.securityService.login(viewModel)
             .subscribe(res => {
                 if (this.returnUrl) {
-                    this.router.navigateByUrl("gigs/" + this.returnUrl.split("/").pop().replace("get", ""))
+                    this.router.navigate([this.returnUrl])
+                } else {
+                    this.router.navigate(["/"])
                 }
                 this.notify.showSuccess(`User ${res.userName} logged in successful`)
                 console.dir(res)

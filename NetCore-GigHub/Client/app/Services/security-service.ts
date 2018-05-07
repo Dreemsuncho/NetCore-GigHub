@@ -32,7 +32,10 @@ export class SecurityService {
     }
 
     logout() {
-        this.resetAuthObject()
+        this.http.get(this.urlApiBase + "/logout")
+            .subscribe(_ => {
+                this.resetAuthObject()
+            })
     }
 
     getTokenBearer() {

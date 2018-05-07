@@ -28,7 +28,6 @@ namespace NetCore_GigHub.Controllers
 
             if (followerId != null)
             {
-
                 if (followeeId == int.Parse(followerId))
                 {
                     errors.Add("The user cannot follow himself!");
