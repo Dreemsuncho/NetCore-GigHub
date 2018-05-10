@@ -33,7 +33,7 @@ export class GigCreateComponent implements OnInit {
     this.http.post("api/gigs/create", reqBody)
       .subscribe(res => {
         console.dir(res)
-        this.router.navigate([""]);
+        this.router.navigate([""])
         this.notify.showSuccess("Your gig was created!")
       })
   }

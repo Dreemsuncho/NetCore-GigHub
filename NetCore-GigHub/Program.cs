@@ -20,7 +20,8 @@ namespace NetCore_GigHub
         private static void _SetupConfig(WebHostBuilderContext ctx, IConfigurationBuilder builder)
         {
             builder.Sources.Clear();
-            builder.AddJsonFile("config.json", optional: false, reloadOnChange: true).AddEnvironmentVariables();
+            builder.AddJsonFile(path: "config.json", optional: false, reloadOnChange: true)
+                .AddEnvironmentVariables();
         }
     }
 }

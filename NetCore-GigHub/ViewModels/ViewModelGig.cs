@@ -34,7 +34,7 @@ namespace NetCore_GigHub.ViewModels
 
             RuleFor(x => x.Date)
                 .Must(_ValidateDateFormat)
-                .WithMessage("Invalid date format, it should be 'Month/Day/Year'!")
+                .WithMessage("Invalid date format, it should be 'yyyy/MM/dd'!")
                 .Must(_ValidateFutureDate)
                 .WithMessage("Date must be in future");
 

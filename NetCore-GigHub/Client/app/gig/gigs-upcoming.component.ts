@@ -17,13 +17,14 @@ export class GigsUpcomingComponent implements OnInit {
     ngOnInit() {
         this.http.get<VmGig[]>("api/gigs/upcoming")
             .subscribe(res => {
-                this.gigs = res
+                this.showActions = res["isAuthenticated"]
+                this.gigs = res["gigs"]
                 console.dir(res)
             })
     }
 
     toggleFollow() {
-        this.http.post("followings/follow", 1003)
+        this.http.post("api/followings/follow", 1003)
             .subscribe(res => {
                 alert("SUCCESS FOLLOW!")
                 console.dir(res)

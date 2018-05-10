@@ -71,12 +71,5 @@ namespace NetCore_GigHub.Controllers
             else
                 return StatusCode(StatusCodes.Status400BadRequest, new { values = errors });
         }
-
-        [HttpGet]
-        public async Task<ActionResult> Logout()
-        {
-            await _managerSecurity.SignOutAsync();
-            return StatusCode(StatusCodes.Status200OK);
-        }
     }
 }

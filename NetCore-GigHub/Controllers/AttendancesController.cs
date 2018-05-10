@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NetCore_GigHub.Data;
@@ -8,6 +10,7 @@ using System.Linq;
 
 namespace NetCore_GigHub.Controllers
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/[controller]/[action]")]
     public class AttendancesController : BaseController
     {
@@ -49,7 +52,8 @@ namespace NetCore_GigHub.Controllers
             }
             else
             {
-                errors.Add("User account does not exist!");
+                // 401 Unauthorized...
+                errors.Add("You have to login first");
             }
 
 

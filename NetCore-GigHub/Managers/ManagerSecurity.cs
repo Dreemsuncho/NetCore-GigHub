@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using NetCore_GigHub.Data;
 using NetCore_GigHub.Entities;
@@ -17,21 +20,21 @@ namespace NetCore_GigHub.Managers
     public class ManagerSecurity
     {
         private readonly JwtSettings _jwtSettings;
+        private readonly ContextGigHub _context;
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
-        private readonly ContextGigHub _context;
 
 
         public ManagerSecurity(
             JwtSettings jwtSettings,
+            ContextGigHub context,
             SignInManager<User> signInManager,
-            UserManager<User> userManager,
-            ContextGigHub context)
+            UserManager<User> userManager)
         {
-            _signInManager = signInManager;
-            _userManager = userManager;
             _context = context;
             _jwtSettings = jwtSettings;
+            _signInManager = signInManager;
+            _userManager = userManager;
         }
 
 
@@ -45,38 +48,22 @@ namespace NetCore_GigHub.Managers
             return _userManager.CreateAsync(user, password);
         }
 
-
-        internal Task<SignInResult> SignInAsync(string userName, string password, bool isPersistent, bool lockoutOnFailure)
-        {
-            return _signInManager.PasswordSignInAsync(userName, password, isPersistent, lockoutOnFailure);
-        }
-
-
-        internal Task SignOutAsync()
-        {
-            return _signInManager.SignOutAsync();
-        }
-
-
         internal async Task<AuthUser> ValidateUser(ViewModelLogin viewModel)
         {
             var authObject = new AuthUser();
 
-            var result = await SignInAsync(
-                userName: viewModel.Username,
-                password: viewModel.Password,
-                isPersistent: true,
-                lockoutOnFailure: false);
-
-            if (result.Succeeded)
-            {
-                var user = await _userManager.FindByNameAsync(viewModel.Username);
+            var user = await _userManager.FindByNameAsync(viewModel.Username);
+            if (user != null)
                 authObject = _BuildUserAuth(user);
-            }
 
             return authObject;
         }
 
+        internal async Task<bool> AuthorizeJwtAsync(HttpContext context)
+        {
+            return (await AuthenticationHttpContextExtensions.AuthenticateAsync(
+                context, JwtBearerDefaults.AuthenticationScheme)).Succeeded;
+        }
 
         private AuthUser _BuildUserAuth(User user)
         {
@@ -84,11 +71,10 @@ namespace NetCore_GigHub.Managers
                 .Where(c => c.UserId == user.Id)
                 .ToList();
 
-            var bearerToken = _BuildJwtBearer(user.UserName, claimsUser);
+            var bearerToken = _BuildJwtBearer(user.Id, claimsUser);
 
             return new AuthUser
             {
-                UserId = user.Id,
                 UserName = user.UserName,
                 BearerToken = bearerToken,
                 IsAuthenticated = true,
@@ -97,17 +83,17 @@ namespace NetCore_GigHub.Managers
         }
 
 
-        private string _BuildJwtBearer(string username, List<ClaimUser> claimsUser)
+        private string _BuildJwtBearer(int userId, List<ClaimUser> claimsUser)
         {
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key));
 
             var claimsJwt = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Sub, username),
+                new Claim(JwtRegisteredClaimNames.Sub, $"{userId}"),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
 
-            claimsUser.ForEach(c => 
+            claimsUser.ForEach(c =>
                 claimsJwt.Add(new Claim(c.ClaimType, c.ClaimValue)));
 
             var token = new JwtSecurityToken(

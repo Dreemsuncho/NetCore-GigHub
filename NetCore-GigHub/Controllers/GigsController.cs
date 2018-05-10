@@ -1,27 +1,34 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NetCore_GigHub.Data;
 using NetCore_GigHub.Entities;
+using NetCore_GigHub.Managers;
 using NetCore_GigHub.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace NetCore_GigHub.Controllers
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/[controller]/[action]")]
     public class GigsController : BaseController
     {
-        private ContextGigHub _context;
+        private readonly ManagerSecurity _managerSecurity;
+        private readonly ContextGigHub _context;
 
-        public GigsController(ContextGigHub context)
+
+        public GigsController(
+            ManagerSecurity managerSecurity,
+            ContextGigHub context)
         {
+            _managerSecurity = managerSecurity;
             _context = context;
         }
+
 
         [HttpGet]
         public ActionResult Genres()
@@ -30,17 +37,21 @@ namespace NetCore_GigHub.Controllers
             return StatusCode(StatusCodes.Status200OK, genres);
         }
 
+
         [HttpGet]
-        public ActionResult Upcoming()
+        public async Task<ActionResult> Upcoming()
         {
-            var res = _context.Gigs
+            var gigs = _context.Gigs
                 .Where(g => g.DateTime > DateTime.Now)
                 .Include(x => x.Genre)
                 .Include(x => x.Artist)
                 .ToList();
 
-            return StatusCode(StatusCodes.Status200OK, res);
+            bool isAuthenticated = await _managerSecurity.AuthorizeJwtAsync(context: HttpContext);
+
+            return StatusCode(StatusCodes.Status200OK, new { gigs, isAuthenticated });
         }
+
 
         [HttpPost]
         public ActionResult Create([FromBody]ViewModelGig viewModel)

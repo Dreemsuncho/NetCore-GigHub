@@ -8,7 +8,6 @@ import { tap } from "rxjs/operators"
 export class SecurityService {
 
     private readonly urlApiBase: string = "api/account"
-    private readonly userIdKey: string = "userId"
     private readonly userNameKey: string = "userName"
     private readonly tokenKey: string = "bearerToken"
 
@@ -18,24 +17,20 @@ export class SecurityService {
     }
 
     register(viewModel) {
-        return this.http.post(`${this.urlApiBase}/register`, viewModel)
+        return this.http.post(this.urlApiBase + "/register", viewModel)
     }
 
     login(viewModel): Observable<AuthObject> {
-        return this.http.post<AuthObject>(`${this.urlApiBase}/login`, viewModel)
+        return this.http.post<AuthObject>(this.urlApiBase + "/login", viewModel)
             .pipe(tap(res => {
                 Object.assign(this.authObject, res)
-                localStorage.setItem(this.userIdKey, "" + this.authObject.userId)
                 localStorage.setItem(this.userNameKey, this.authObject.userName)
                 localStorage.setItem(this.tokenKey, this.authObject.bearerToken)
             }))
     }
 
     logout() {
-        this.http.get(this.urlApiBase + "/logout")
-            .subscribe(_ => {
-                this.resetAuthObject()
-            })
+        this.resetAuthObject()
     }
 
     getTokenBearer() {
@@ -43,20 +38,17 @@ export class SecurityService {
     }
 
     private resetAuthObject() {
-        this.authObject.userId = null
         this.authObject.userName = null
         this.authObject.bearerToken = null
         this.authObject.isAuthenticated = false
 
         this.authObject.claims = []
-        localStorage.removeItem(this.userIdKey)
         localStorage.removeItem(this.userNameKey)
         localStorage.removeItem(this.tokenKey)
     }
 }
 
 class AuthObject {
-    userId: number
     userName: string
     bearerToken: string
     isAuthenticated: boolean = false
