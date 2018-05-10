@@ -14,7 +14,9 @@ export class SecurityInterceptor implements HttpInterceptor {
     private notify: NotificationService) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    
     console.dir(req)
+
     return next.handle(req).pipe(
       tap(() => { }, err => {
         if (err instanceof HttpErrorResponse && err.status === 401) {
@@ -24,7 +26,6 @@ export class SecurityInterceptor implements HttpInterceptor {
         }
         else if (err.error.values instanceof Array) {
           err.error.values.forEach(msg => this.notify.showError(msg))
-          console.dir(err)
         }
       }))
   }

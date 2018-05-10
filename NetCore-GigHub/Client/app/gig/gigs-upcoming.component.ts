@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core"
 import { HttpClient } from "@angular/common/http"
+import { NotificationService } from "../Services/notification-service"
 
 @Component({
     selector: "gigs-upcoming",
@@ -7,35 +8,35 @@ import { HttpClient } from "@angular/common/http"
 })
 export class GigsUpcomingComponent implements OnInit {
 
+    private urlApi: string = "api/gigs"
+
     public pageTitle: string = "Upcoming gigs"
     public gigs: VmGig[] = []
-    public showActions: boolean = true
+    public showActions: boolean
 
     constructor(
-        private http: HttpClient) { }
+        private http: HttpClient,
+        private notify: NotificationService) { }
 
     ngOnInit() {
-        this.http.get<VmGig[]>("api/gigs/upcoming")
+        this.http.get<VmGig[]>(this.urlApi + "/upcoming")
             .subscribe(res => {
                 this.showActions = res["isAuthenticated"]
                 this.gigs = res["gigs"]
-                console.dir(res)
             })
     }
 
-    toggleFollow() {
-        this.http.post("api/followings/follow", 1003)
-            .subscribe(res => {
-                alert("SUCCESS FOLLOW!")
-                console.dir(res)
+    toggleFollow(followeeId) {
+        this.http.post("api/followings/follow", followeeId)
+            .subscribe(_ => {
+                this.notify.showSuccess("Successfully follow user '" + followeeId + "'")
             })
     }
 
     toggleGoing(gigId) {
         this.http.post("api/attendances/attend", gigId)
-            .subscribe(res => {
-                alert("SUCCESS Attend!")
-                console.dir(res)
+            .subscribe(_ => {
+                this.notify.showSuccess("Successfully attend to gig '" + gigId + "'")
             })
     }
 }

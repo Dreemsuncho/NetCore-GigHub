@@ -7,9 +7,9 @@ import { tap } from "rxjs/operators"
 @Injectable()
 export class SecurityService {
 
-    private readonly urlApiBase: string = "api/account"
-    private readonly userNameKey: string = "userName"
-    private readonly tokenKey: string = "bearerToken"
+    private readonly urlApi: string = "api/account"
+    private readonly keyUserName: string = "userName"
+    private readonly keyToken: string = "bearerToken"
 
     public authObject: AuthObject = new AuthObject
 
@@ -17,15 +17,15 @@ export class SecurityService {
     }
 
     register(viewModel) {
-        return this.http.post(this.urlApiBase + "/register", viewModel)
+        return this.http.post(this.urlApi + "/register", viewModel)
     }
 
     login(viewModel): Observable<AuthObject> {
-        return this.http.post<AuthObject>(this.urlApiBase + "/login", viewModel)
+        return this.http.post<AuthObject>(this.urlApi + "/login", viewModel)
             .pipe(tap(res => {
                 Object.assign(this.authObject, res)
-                localStorage.setItem(this.userNameKey, this.authObject.userName)
-                localStorage.setItem(this.tokenKey, this.authObject.bearerToken)
+                localStorage.setItem(this.keyUserName, this.authObject.userName)
+                localStorage.setItem(this.keyToken, this.authObject.bearerToken)
             }))
     }
 
@@ -34,7 +34,7 @@ export class SecurityService {
     }
 
     getTokenBearer() {
-        return localStorage.getItem(this.tokenKey)
+        return localStorage.getItem(this.keyToken)
     }
 
     private resetAuthObject() {
@@ -43,8 +43,8 @@ export class SecurityService {
         this.authObject.isAuthenticated = false
 
         this.authObject.claims = []
-        localStorage.removeItem(this.userNameKey)
-        localStorage.removeItem(this.tokenKey)
+        localStorage.removeItem(this.keyUserName)
+        localStorage.removeItem(this.keyToken)
     }
 }
 

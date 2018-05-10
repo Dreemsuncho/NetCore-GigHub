@@ -16,7 +16,7 @@
             <div class="col">
                 <section class="mt-2">
                     <strong>{{ gig.artist.userName }}</strong>
-                    <button *ngIf="showActions" (click)="toggleFollow(gig.id)" class="btn btn-link float-right mr-3">
+                    <button *ngIf="showActions" (click)="toggleFollow(gig.artist.id)" class="btn btn-link float-right mr-3">
                         Follow
                     </button>
                 </section>

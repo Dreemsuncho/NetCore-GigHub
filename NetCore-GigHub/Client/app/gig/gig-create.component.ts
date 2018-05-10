@@ -25,14 +25,12 @@ export class GigCreateComponent implements OnInit {
       })
   }
 
-  createGig(formValues) {
-    let reqBody = formValues
+  createGig(reqBody) {
     reqBody.GenreId = reqBody.GenreId || "0"
 
     this.http.post(this.apiUrl + "/create", reqBody)
-      .subscribe(res => {
-        console.dir(res)
-        this.router.navigate([""])
+      .subscribe(_ => {
+        this.router.navigate(["gigs/upcoming"])
         this.notify.showSuccess("Your gig was created!")
       })
   }
