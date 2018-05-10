@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NetCore_GigHub.Data;
 using NetCore_GigHub.Entities;
+using NetCore_GigHub.Managers;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,47 +15,38 @@ namespace NetCore_GigHub.Controllers
     public class AttendancesController : BaseController
     {
         private readonly ContextGigHub _context;
-        private readonly UserManager<User> _userManager;
-        private readonly SignInManager<User> _signInManager;
+        private readonly ManagerSecurity _managerSecurity;
 
-        public AttendancesController(ContextGigHub context, UserManager<User> userManager, SignInManager<User> signInManager)
+
+        public AttendancesController(ContextGigHub context, ManagerSecurity managerSecurity)
         {
             _context = context;
-            _userManager = userManager;
-            _signInManager = signInManager;
+            _managerSecurity = managerSecurity;
         }
+
 
         [HttpPost]
         public ActionResult Attend([FromBody]int gigId)
         {
             var errors = new List<string>();
 
-            var userId = _userManager.GetUserId(User);
+            var userId = _managerSecurity.GetUserId(User);
 
-            if (userId != null)
+            if (_context.Attendances.Any(a => a.UserId == userId && a.GigId == gigId))
             {
-                if (_context.Attendances.Any(a => a.UserId == int.Parse(userId) && a.GigId == gigId))
-                {
-                    errors.Add("The attendance already exists!");
-                }
-                else
-                {
-                    var entity = new Attendance
-                    {
-                        GigId = gigId,
-                        UserId = int.Parse(userId)
-                    };
-
-                    _context.Attendances.Add(entity);
-                    _context.SaveChanges();
-                }
+                errors.Add("The attendance already exists!");
             }
             else
             {
-                // 401 Unauthorized...
-                errors.Add("You have to login first");
-            }
+                var entity = new Attendance
+                {
+                    GigId = gigId,
+                    UserId = userId
+                };
 
+                _context.Attendances.Add(entity);
+                _context.SaveChanges();
+            }
 
             if (errors.Count == 0)
                 return StatusCode(StatusCodes.Status201Created);
