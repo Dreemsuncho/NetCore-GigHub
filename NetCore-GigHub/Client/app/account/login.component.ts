@@ -31,7 +31,6 @@ export class LoginComponent implements OnInit {
                     this.router.navigate(["/"])
                 }
                 this.notify.showSuccess(`User ${res.userName} logged in successful`)
-                console.dir(res)
             })
     }
 }

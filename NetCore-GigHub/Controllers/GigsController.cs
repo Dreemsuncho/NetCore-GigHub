@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,7 @@ using System.Threading.Tasks;
 
 namespace NetCore_GigHub.Controllers
 {
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/[controller]/[action]")]
     public class GigsController : BaseController
     {
@@ -30,6 +32,7 @@ namespace NetCore_GigHub.Controllers
         }
 
 
+        [AllowAnonymous]
         [HttpGet]
         public ActionResult Genres()
         {
@@ -38,6 +41,7 @@ namespace NetCore_GigHub.Controllers
         }
 
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult> Upcoming()
         {
@@ -65,7 +69,7 @@ namespace NetCore_GigHub.Controllers
                     Venue = viewModel.Venue,
                     DateTime = viewModel.GetDateTime(),
                     GenreId = viewModel.GenreId,
-                    ArtistId = viewModel.ArtistId
+                    ArtistId = _managerSecurity.GetUserId(User)
                 });
 
                 _context.SaveChanges();

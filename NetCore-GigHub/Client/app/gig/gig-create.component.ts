@@ -10,6 +10,7 @@ import { NotificationService } from "../Services/notification-service"
 })
 export class GigCreateComponent implements OnInit {
 
+  private readonly apiUrl = "api/gigs"
   public genres: Genre[] = []
 
   constructor(
@@ -18,7 +19,7 @@ export class GigCreateComponent implements OnInit {
     private notify: NotificationService) { }
 
   ngOnInit() {
-    this.http.get("api/gigs/genres")
+    this.http.get(this.apiUrl + "/genres")
       .subscribe(res => {
         Object.assign(this.genres, res)
       })
@@ -26,11 +27,9 @@ export class GigCreateComponent implements OnInit {
 
   createGig(formValues) {
     let reqBody = formValues
-    reqBody.ArtistId = localStorage.getItem("userId")
-    if (reqBody.GenreId === "")
-      reqBody.GenreId = "0"
+    reqBody.GenreId = reqBody.GenreId || "0"
 
-    this.http.post("api/gigs/create", reqBody)
+    this.http.post(this.apiUrl + "/create", reqBody)
       .subscribe(res => {
         console.dir(res)
         this.router.navigate([""])

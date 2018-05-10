@@ -65,6 +65,11 @@ namespace NetCore_GigHub.Managers
                 context, JwtBearerDefaults.AuthenticationScheme)).Succeeded;
         }
 
+        internal int GetUserId(ClaimsPrincipal user)
+        {
+            return int.Parse(_userManager.GetUserId(user));
+        }
+
         private AuthUser _BuildUserAuth(User user)
         {
             var claimsUser = _context.Claims
